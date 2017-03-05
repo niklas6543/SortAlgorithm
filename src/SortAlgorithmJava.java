@@ -42,6 +42,41 @@ public class SortAlgorithmJava {
 
 	}
 	
+	public static int[] selectionSort(int[] a){
+		int index = 0;
+		int minIndex = 0;
+		int h;
+		
+		for (int i = 0; i < a.length; i++) {
+			for (int j = index; j < a.length; j++) {
+				if (a[minIndex] > a[j]){
+					minIndex = j;
+				}
+			}
+			
+			h = a[index];
+			a[index] = a[minIndex];
+			a[minIndex] = h;
+			
+			index++;
+			
+		}
+		return a;
+	}
+	
+	public static int[] insertionSort(int[] a){
+		for (int i = 0; i < a.length; i++) {
+			
+		}
+		
+		return a;
+	}
+	
+
+	
+	
+/*
+	
 	public static int[] quickSort(int[] a, int refNumber){
 		for (int i = 0; i < a.length; i++) {
 			
@@ -69,6 +104,8 @@ public class SortAlgorithmJava {
 		return refNumber;
 		
 	}
+	
+*/
 	
 
 }
