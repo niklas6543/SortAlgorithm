@@ -41,6 +41,44 @@ public class SortAlgorithmJava {
 		return a;
 
 	}
+	public static int[] delete(int[] a, int index) {
+		// entfernt ein Element aus dem Array anhand des Index
+		int[] newa = new int[a.length - 1];
+		int j = 0;
+		for (int i = 0; i < a.length; i++) {
+			if (i != index) {
+				newa[j] = a[i];
+				j++;
+			}
+		}
+		
+		return newa;
+	}
+
+	public static int[] selectionSort_slow(int[] a) {
+		//im Array b werden die Zahlen in sortierter Reihenfolge aufgesammelt
+		int[] b = new int[a.length];
+		//in size wird die Anzahl der zu sortierenden Zahlen abgelegt
+		int size = a.length;
+		
+		for (int i = 0; i < size ; i++) {
+			int index = 0;
+
+			for (int j = 0; j < a.length; j++) {
+				//suche nach der kleinsten Zahl
+				if (a[index] > a[j]) {
+					index = j;
+				}
+			}
+			//lege aktuell kleinste Zahl ab
+			b[i] = a[index];
+			//lösche aktuell kleinste Zahl aus meinem unsortierten Array
+			a = delete(a, index);
+			System.out.println(Arrays.toString(a));
+			
+		}
+		return b;
+	}
 	
 	public static int[] selectionSort(int[] a){
 		int index = 0;
