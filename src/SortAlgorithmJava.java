@@ -3,31 +3,48 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class SortAlgorithmJava {
+	static boolean up;
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
+		long start;
+		while (true) {
+			int[] a = generateArray(1000, 100);
+			System.out.println(Arrays.toString(a));
 
-		int[] a = generateArray(10, 100);
-		System.out.println(Arrays.toString(a));
+			System.out.println("sorting up or down?");
+			String updown = input.next();
 
-		
-		System.out.println("sorting up or down?"); String updown =
-		input.next();
-		  
-		if (updown.equals("up")){
-			System.out.println("Bubble Sort\n"+Arrays.toString(bubbleSort(a, true)));
-			System.out.println("Selection Sort slow\n"+Arrays.toString(selectionSort_slow(a, true)));
-			System.out.println("Selection Sort\n"+Arrays.toString(selectionSort(a, true)));
-			System.out.println("Insertion Sort\n"+Arrays.toString(insertionSort(a, true))); 
-			System.out.println("Quick Sort\n"+Arrays.toString(callQuickSort(a, true)));
-		}else if (updown.equals("down")){
-			System.out.println("Bubble Sort\n"+Arrays.toString(bubbleSort(a,false)));
-			System.out.println("Selection Sort slow\n"+Arrays.toString(selectionSort_slow(a, false)));
-			System.out.println("Selection Sort\n"+Arrays.toString(selectionSort(a, false)));
-			System.out.println("Insertion Sort\n"+Arrays.toString(insertionSort(a, false))); 
-			System.out.println("Quick Sort\n"+Arrays.toString(callQuickSort(a, false)));
-		}else{
-		 System.out.println("error your entry is invalid"); 
+			if (updown.equals("up")) {
+				up = true;
+			} else if (updown.equals("down")) {
+				up = false;
+			} else {
+				System.out.println("error your entry is invalid");
+				System.exit(0);
+			}
+
+			start = System.currentTimeMillis();
+			System.out.println("Bubble Sort\n" + Arrays.toString(bubbleSort(a)));
+			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec\n\n");
+
+			start = System.currentTimeMillis();
+			System.out.println("Selection Sort slow\n" + Arrays.toString(selectionSort_slow(a)));
+			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec\n\n");
+
+			start = System.currentTimeMillis();
+			System.out.println("Selection Sort\n" + Arrays.toString(selectionSort(a)));
+			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec\n\n");
+
+			start = System.currentTimeMillis();
+			System.out.println("Insertion Sort\n" + Arrays.toString(insertionSort(a)));
+			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec\n\n");
+
+			start = System.currentTimeMillis();
+			System.out.println("Quick Sort\n" + Arrays.toString(callQuickSort(a)));
+			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec\n\n");
+
+			System.out.println("#############################################\n\n");
 		}
 	}
 
@@ -41,7 +58,11 @@ public class SortAlgorithmJava {
 		return a;
 	}
 
-	public static int[] bubbleSort(final int[] a, boolean up) {
+	public static long speedCheck(long start, long end) {
+		return (end - start);
+	}
+
+	public static int[] bubbleSort(final int[] a) {
 		boolean abb = false;
 		int h;
 
@@ -80,7 +101,7 @@ public class SortAlgorithmJava {
 		return newa;
 	}
 
-	public static int[] selectionSort_slow(int[] a, boolean up) {
+	public static int[] selectionSort_slow(int[] a) {
 		// im Array b werden die Zahlen in sortierter Reihenfolge aufgesammelt
 		int[] b = new int[a.length];
 		// in size wird die Anzahl der zu sortierenden Zahlen abgelegt
@@ -106,7 +127,7 @@ public class SortAlgorithmJava {
 		return b;
 	}
 
-	public static int[] selectionSort(final int[] a, boolean up) {
+	public static int[] selectionSort(final int[] a) {
 		int minIndex = 0;
 		int h;
 
@@ -129,7 +150,7 @@ public class SortAlgorithmJava {
 		return a;
 	}
 
-	public static int[] insertionSort(final int[] a, boolean up) {
+	public static int[] insertionSort(final int[] a) {
 		int h;
 		int refNum;
 
@@ -154,63 +175,60 @@ public class SortAlgorithmJava {
 		return a;
 	}
 
-	public static int[] callQuickSort(final int[]a, boolean up){
+	public static int[] callQuickSort(final int[] a) {
 		int[] list = a.clone();
-		//Beginn am Anfang und am Ende 
-		quickSort(list, 0, a.length - 1 , up);
+		// Beginn am Anfang und am Ende
+		quickSort(list, 0, a.length - 1);
 		return list;
 	}
-	
-	private static void quickSort(int[] list, int left, int right, boolean up){
+
+	private static void quickSort(int[] list, int left, int right) {
 		int partition;
-		
+
 		if (left < right && up || left > right && !up) {
-			//suche nach pivot
+			// suche nach pivot
 			partition = part(list, left, right);
-			//neue Grenze für links und rechts
-			quickSort(list, left, partition-1, up);
-			quickSort(list, partition+1, right, up);
-		
-		} 
-		
+			// neue Grenze fï¿½r links und rechts
+			quickSort(list, left, partition - 1);
+			quickSort(list, partition + 1, right);
+
+		}
+
 	}
-	
-	
-	
-	private static int part(int[] list, int left, int right){
+
+	private static int part(int[] list, int left, int right) {
 		int i = left;
-		//links vom pivot Element
-		int j = right-1;
+		// links vom pivot Element
+		int j = right - 1;
 		int h;
 		int pivot = list[right];
-		
+
 		do {
-			//linkes Element größer als pivot 
+			// linkes Element grï¿½ï¿½er als pivot
 			while (list[i] <= pivot && i < right) {
 				i++;
 			}
-			//rechtes Element kleiner als pivot 
-			while (list[j] >= pivot && i > left) {
+			// rechtes Element kleiner als pivot
+			while (list[j] >= pivot && j > left) {
 				j--;
 			}
-			
+
 			if (i < j) {
-				 h = list[i];
-				 list[i] = list[j];
-				 list[j] = h;
+				h = list[i];
+				list[i] = list[j];
+				list[j] = h;
 			}
-		//links darf nicht an rechts vorbeilaufen	
+			// links darf nicht an rechts vorbeilaufen
 		} while (i < j);
-			
+
 		if (list[i] > pivot) {
-			//tausche pivot mit rechts
+			// tausche pivot mit rechts
 			h = list[i];
 			list[i] = list[right];
 			list[right] = h;
 		}
-		//gibt die Position des pivot Elementes zurück
+		// gibt die Position des pivot Elementes zurï¿½ck
 		return i;
 	}
-	
 
 }
