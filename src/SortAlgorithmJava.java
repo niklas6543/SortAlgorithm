@@ -4,21 +4,30 @@ import java.util.Scanner;
 
 public class SortAlgorithmJava {
 	static boolean up;
-	static int anz = 1;
-	static long timeBubble;
-	static long timeSelection;
-	static long timeSelection_slow;
-	static long timeInsertion;
-	static long timeQuick;
+	static int count = 1;
+	
+	static long[] timesBubble;
+	static long[] timesSelection;
+	static long[] timesSelection_slow;
+	static long[] timesInsertion;
+	static long[] timesQuick;
 
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		long start;
-		while (true) {
-			int[] a = generateArray(anz*100, 1000);
+		int anz = 10;
+		
+		timesBubble = new long[anz];
+		timesSelection = new long[anz];
+		timesSelection_slow = new long[anz];
+		timesInsertion = new long[anz];
+		timesQuick = new long[anz];
+		
+		while (count <= anz) {
+			int[] a = generateArray(count*100, 1000);
 			System.out.println(Arrays.toString(a));
 
-			System.out.println("sorting up or down? | passing: " + anz + " | array length: " + anz*100 + " elements");
+			System.out.println("sorting up or down? | passing: " + count + " | array length: " + count*100 + " elements");
 			String updown = input.next();
 
 			if (updown.equals("up")) {
@@ -32,36 +41,37 @@ public class SortAlgorithmJava {
 
 			start = System.currentTimeMillis();
 			System.out.println("Bubble Sort\n" + Arrays.toString(bubbleSort(a)));
-			timeBubble += speedCheck(start, System.currentTimeMillis());
+			timesBubble[count-1] = speedCheck(start, System.currentTimeMillis());
 			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec");
-			System.out.println("-> average: " + average(timeBubble) + " msec\n\n");
-
+			System.out.println("-> average: " + average(timesBubble) + " msec\n\n");
+			effortClass(timesBubble, count*100);
+/*
 			start = System.currentTimeMillis();
 			System.out.println("Selection Sort slow\n" + Arrays.toString(selectionSort_slow(a)));
-			timeSelection_slow += speedCheck(start, System.currentTimeMillis());
+			timesSelection_slow[count-1] = speedCheck(start, System.currentTimeMillis());
 			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec");
-			System.out.println("-> average: " + average(timeSelection_slow) + " msec\n\n");
+			System.out.println("-> average: " + average(timesSelection_slow) + " msec\n\n");
 
 			start = System.currentTimeMillis();
 			System.out.println("Selection Sort\n" + Arrays.toString(selectionSort(a)));
-			timeSelection += speedCheck(start, System.currentTimeMillis());
+			timesSelection[count-1] = speedCheck(start, System.currentTimeMillis());
 			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec");
-			System.out.println("-> average: " + average(timeSelection) + " msec\n\n");
+			System.out.println("-> average: " + average(timesSelection) + " msec\n\n");
 
 			start = System.currentTimeMillis();
 			System.out.println("Insertion Sort\n" + Arrays.toString(insertionSort(a)));
-			timeBubble += speedCheck(start, System.currentTimeMillis());
+			timesBubble[count-1] = speedCheck(start, System.currentTimeMillis());
 			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec");
-			System.out.println("-> average: " + average(timeInsertion) + " msec\n\n");
+			System.out.println("-> average: " + average(timesInsertion) + " msec\n\n");
 			
 			start = System.currentTimeMillis();
 			System.out.println("Quick Sort\n" + Arrays.toString(callQuickSort(a)));
-			timeQuick += speedCheck(start, System.currentTimeMillis());
+			timesQuick[count-1] = speedCheck(start, System.currentTimeMillis());
 			System.out.println("speed: " + speedCheck(start, System.currentTimeMillis()) + " msec");
-			System.out.println("-> average: " + average(timeQuick) + " msec\n\n");
+			System.out.println("-> average: " + average(timesQuick) + " msec\n\n");*/
 			
 			System.out.println("#############################################\n\n");
-			anz++;
+			count++;
 		}
 	}
 
@@ -75,13 +85,28 @@ public class SortAlgorithmJava {
 		return a;
 	}
 	
-	public static long average(final long time){
+	public static long average(final long[] times){
 		//System.out.println(time+" "+anz);
-		return time/anz;
+		long averageTime = 0;
+		
+		for (int i = 0; i < count; i++) {
+			averageTime+=times[i];
+		}
+		
+		return averageTime/count;
 	}
 
 	public static long speedCheck(long start, long end) {
 		return (end - start);
+	}
+	
+	public static void effortClass(long[] times, int elements){
+		float[] slope = new float[count];
+		
+		for (int i = 1; i < count && count > 1; i++) {
+			slope[i] = (elements - elements/2)/(times[i] - times[i-1]);
+		}
+		System.out.println(Arrays.toString(slope));
 	}
 
 	public static int[] bubbleSort(final int[] a) {
